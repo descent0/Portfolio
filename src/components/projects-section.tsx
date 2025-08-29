@@ -10,6 +10,23 @@ interface ProjectsSectionProps {
 }
 
 const defaultProjects: Project[] = [
+   {
+   title: "SafeStranger",
+description:
+  "Real-time anonymous chat and video matching platform built with WebRTC and a custom signaling server, featuring NSFW.js for live video moderation and an efficient pool-based matching algorithm.",
+technologies: [
+  "Next.js",
+  "WebRTC",
+  "Web Sockets",
+  "Signaling Server",
+  "NSFW.js",
+  "Tailwind CSS",
+],
+    codeUrl: "https://github.com/descent0/SAFE_STRANGERS",
+    liveUrl: "https://safe-strangers.vercel.app/",
+    featured: true,
+    imageUrl: "/safeStranger.png",
+  },
   {
     title: "noWaitz",
     description:
@@ -24,7 +41,7 @@ const defaultProjects: Project[] = [
       "NodeMailer",
       "Google OAuth",
     ],
-    codeUrl: "#",
+    codeUrl: "https://github.com/descent0/nowaitz",
     liveUrl: "https://nowaitz.vercel.app",
     featured: true,
     imageUrl: "/nowaitz.png",
@@ -53,7 +70,7 @@ const defaultProjects: Project[] = [
     description:
       "Web platform for managing digital invitations with card categories and employee controls. Includes design tools and bulk email delivery.",
     technologies: ["PHP", "MySQL", "HTML5", "Bootstrap", "JavaScript", "XAMPP", "stateful_auth"],
-    codeUrl: "#",
+    codeUrl: "https://github.com/descent0/Nyaauta",
     liveUrl: "#",
     featured: true,
     imageUrl: "/nyaauta.png",
@@ -63,7 +80,7 @@ const defaultProjects: Project[] = [
     description:
       "A dashboard to visualize & track your finance according to the vis",
     technologies: ["Next.js", "shadCN UI", "Tailwind CSS", "lucide-react"],
-    codeUrl: "#",
+    codeUrl: "https://github.com/descent0/Yardstick",
     liveUrl: "https://yardstick-eight.vercel.app",
     featured: true,
     imageUrl: "/finance.png",
