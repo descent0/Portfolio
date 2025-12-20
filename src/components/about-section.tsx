@@ -6,6 +6,7 @@ import {
   OrbitControls,
 } from "@react-three/drei"
 import type { PersonalInfo } from "@/lib/types"
+import Link from "next/link";
 
 
 import InteractiveBlob from "./Interactive-smilie"
@@ -59,6 +60,7 @@ export default function AboutSection({ personalInfo }: AboutSectionProps) {
           </div>
         </div>
 
+<Link href="#contact" className="w-full h-full flex justify-center items-center">
           <Canvas camera={{ position: [0, 0, 3.5], fov: 60 }}>
             <ambientLight intensity={0.5} />
             <pointLight position={[5, 5, 5]} />
@@ -66,6 +68,7 @@ export default function AboutSection({ personalInfo }: AboutSectionProps) {
             <Environment preset="night" />
             <OrbitControls enableZoom={false} enablePan={false} />
           </Canvas>
+          </Link>
         
       </div>
     </section>
