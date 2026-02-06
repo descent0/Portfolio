@@ -1,6 +1,11 @@
 'use client'
 
+import { useState } from 'react'
+import ChatBot from '@/components/ChatBot'
+
 export default function Hero() {
+  const [isChatOpen, setIsChatOpen] = useState(false)
+
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId)
     if (element) {
@@ -8,7 +13,7 @@ export default function Hero() {
     }
   }
   return (
-    <div id="hero" className="min-w-screen w-screen h-screen flex relative bg-gray-600 overflow-hidden">
+    <div id="hero" className="min-w-screen w-screen h-screen flex relative bg-gradient-to-b from-slate-800 via-slate-700 to-slate-800 overflow-hidden">
       {/* Left Side */}
       {/* Left Side Container (The "Border" Layer) */}
 <div className="relative h-screen w-full md:w-[50%] md:min-w-fit bg-white md:[clip-path:polygon(0%_0%,_82%_0%,_100%_50%,_82%_100%,_0%_100%)] z-[2]">
@@ -64,7 +69,7 @@ export default function Hero() {
 
     
       {/* Right Side */}
-      <div className="hidden md:flex flex-1 bg-gray-600 flex-col p-8 relative z-[1]">
+      <div className="hidden md:flex flex-1 flex-col p-8 relative z-[1]">
         <nav className="flex justify-end gap-8 px-8 py-4 mb-8">
           <button onClick={() => scrollToSection('about')} className="text-white no-underline text-base font-medium transition-all duration-300 relative hover:text-gray-200 after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-0.5 after:bg-white after:transition-all after:duration-300 hover:after:w-full bg-transparent border-none cursor-pointer">
             About
@@ -89,14 +94,19 @@ export default function Hero() {
           </div>
         </div>
 
-        <button className="self-end px-8 py-4 bg-transparent border-2 border-white text-white rounded-full text-base font-medium cursor-pointer flex items-center gap-2 transition-all duration-300 mx-8 my-4 mb-4 hover:bg-white hover:text-gray-600 hover:translate-x-1 [&>svg]:hover:translate-x-1">
-          Explore Work
+        <button 
+          onClick={() => setIsChatOpen(true)}
+          className="self-end px-8 py-4 bg-transparent border-2 border-white text-white rounded-full text-base font-medium cursor-pointer flex items-center gap-2 transition-all duration-300 mx-8 my-4 mb-4 hover:bg-white hover:text-gray-600 hover:translate-x-1 [&>svg]:hover:translate-x-1"
+        >
+          Ask AI
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform duration-300">
-            <line x1="5" y1="12" x2="19" y2="12"></line>
-            <polyline points="12 5 19 12 12 19"></polyline>
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
           </svg>
         </button>
       </div>
+
+      {/* ChatBot Component */}
+      <ChatBot isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
     </div>
   )
 }

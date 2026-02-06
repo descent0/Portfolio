@@ -1,0 +1,58 @@
+{
+  "projects": [
+    {
+      "id": 1,
+      "title": "Portfolio Website",
+      "description": "Personal portfolio website built with Next.js and Tailwind CSS",
+      "image": "/portfolio.png",
+      "technologies": ["Next.js", "React", "Tailwind CSS", "TypeScript"],
+      "liveUrl": "#",
+      "githubUrl": "#"
+    },
+    {
+      "id": 2,
+      "title": "Finance Tracker",
+      "description": "A finance management application to track expenses and income",
+      "image": "/finance.png",
+      "technologies": ["React", "Node.js", "MongoDB", "Express"],
+      "liveUrl": "#",
+      "githubUrl": "#"
+    },
+    {
+      "id": 3,
+      "title": "Safe Stranger",
+      "description": "Safety application for secure social interactions",
+      "image": "/safeStranger.png",
+      "technologies": ["React", "Firebase", "Maps API"],
+      "liveUrl": "#",
+      "githubUrl": "#"
+    },
+    {
+      "id": 4,
+      "title": "EFAT",
+      "description": "Educational platform for students",
+      "image": "/EFAT.png",
+      "technologies": ["Next.js", "MongoDB", "Node.js"],
+      "liveUrl": "#",
+      "githubUrl": "#"
+    },
+    {
+      "id": 5,
+      "title": "NoWaitz",
+      "description": "Queue management system",
+      "image": "/nowaitz.png",
+      "technologies": ["React", "Express", "PostgreSQL"],
+      "liveUrl": "#",
+      "githubUrl": "#"
+    },
+    {
+      "id": 6,
+      "title": "Nyaauta",
+      "description": "Anime tracking and recommendation platform",
+      "image": "/nyaauta.png",
+      "technologies": ["React", "Node.js", "MongoDB"],
+      "liveUrl": "#",
+      "githubUrl": "#"
+    }
+  ]
+}

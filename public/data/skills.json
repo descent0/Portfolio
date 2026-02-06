@@ -1,0 +1,16 @@
+{
+  "categories": [
+    {
+      "title": "Frontend",
+      "skills": ["React", "Next.js", "HTML", "CSS", "JavaScript", "TypeScript", "Tailwind CSS"]
+    },
+    {
+      "title": "Backend",
+      "skills": ["Node.js", "Express", "MongoDB", "PHP", "REST APIs", "Authentication"]
+    },
+    {
+      "title": "Tools",
+      "skills": ["Git", "GitHub", "VS Code", "Postman", "npm", "Webpack", "Docker"]
+    }
+  ]
+}

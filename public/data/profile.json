@@ -1,0 +1,15 @@
+{
+  "name": "DISHANT RAJPUT",
+  "tagline": "I BUILD SYSTEMS, NOT JUST CODE",
+  "email": "dishant.rajput@example.com",
+  "about": "I'm a Computer Science & Engineering undergrad at KIET with a builder's mindset and a coder's heart. My core stack is MERN, but I'm always exploring — Next.js, PHP, and NLP are part of my toolkit too. Whether it's coding, collaborating, or leading digital initiatives, I'm all about pushing boundaries and growing with the tech community.",
+  "social": {
+    "linkedin": "https://linkedin.com/in/dishant-rajput",
+    "github": "https://github.com/dishant-rajput",
+    "email": "dishant.rajput@example.com"
+  },
+  "showcaseImages": [
+    "/portfolio.png",
+    "/finance.png"
+  ]
+}
