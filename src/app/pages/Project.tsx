@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import Image from 'next/image'
+import { useEffect, useState, useRef } from 'react'
+import HangingLetters from '@/components/HangingLetters'
 
 interface Project {
   id: number
@@ -15,6 +15,9 @@ interface Project {
 
 export default function Project() {
   const [projects, setProjects] = useState<Project[]>([])
+  const [showAll, setShowAll] = useState(false)
+  const [isInView, setIsInView] = useState(false)
+  const sectionRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     fetch('/data/projects.json')
@@ -22,40 +25,70 @@ export default function Project() {
       .then((data) => setProjects(data.projects))
   }, [])
 
+  // Intersection Observer to detect when section is in view
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !isInView) {
+          setIsInView(true)
+        }
+      },
+      { threshold: 0.2 }
+    )
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current)
+    }
+
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current)
+      }
+    }
+  }, [isInView])
+
+  const visibleProjects = showAll ? projects : projects.slice(0, 3)
+
+  // Calculate dynamic width based on number of projects
+  const projectWidth = 320
+  const gap = 64
+  const paddingLeft = 80
+  const paddingRight = 128
+  const buttonWidth = 200
+  const calculatedWidth = paddingLeft + (visibleProjects.length * projectWidth) + ((visibleProjects.length - 1) * gap) + buttonWidth + paddingRight
+  const containerWidth = `${Math.max(calculatedWidth, typeof window !== 'undefined' ? window.innerWidth : 1024)}px`
+
   return (
-    <div id="projects" className="relative h-screen w-[200vw] bg-gradient-to-b from-slate-800 via-slate-700 to-slate-800 overflow-hidden">
-      
-
+    <div 
+      ref={sectionRef}
+      id="projects" 
+      className="relative h-screen bg-gradient-to-b from-slate-800 via-slate-700 to-slate-800 overflow-hidden transition-all duration-700" 
+      style={{ width: containerWidth }}
+    >
       {/* Title Section */}
-      <div className="absolute top-16 z-20 ">
-        <h1 className="text-6xl  font-bold text-white mb-8 uppercase tracking-wider" style={{fontFamily: 'Cinzel, serif'}}>
-         My 
-         <div>
-         Projects</div>
-
+      <div className="absolute top-8 left-0 z-20">
+        <h1 className="text-6xl font-bold text-white uppercase tracking-[0.15em]" style={{fontFamily: 'Cinzel, serif'}}>
+          <HangingLetters text="FEATURED" isInView={isInView} />
         </h1>
- </div>
+      </div>
 
       {/* Timeline Container */}
-      <div className="absolute top-1/2 left-0 w-full transform -translate-y-1/2">
+      <div className="absolute top-1/2 left-10 w-full transform -translate-y-1/2 transition-all duration-700">
         {/* Timeline Line */}
-        <div className="absolute top-1/2 left-0 w-full h-1 bg-gradient-to-r from-slate-600 via-slate-500 to-slate-600 transform -translate-y-1/2 z-0"></div>
+        <div className="absolute top-1/2 left-0 w-[calc[100%-10px]] h-1 bg-gradient-to-r from-slate-600 via-slate-500 to-slate-600 transform -translate-y-1/2 z-0 transition-all duration-700"></div>
         
         {/* Animated glow effect on timeline */}
-        <div className="absolute top-1/2 left-0 w-full h-1 transform -translate-y-1/2 z-0">
+        <div className="absolute top-1/2 left-0 w-full h-1 transform -translate-y-1/2 z-0 transition-all duration-700">
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-slate-400 to-transparent opacity-30 animate-pulse"></div>
         </div>
 
         {/* Timeline Projects */}
-        <div className="relative flex items-center justify-start pl-32 pr-32 gap-16">
-          {projects.map((project, index) => (
+        <div className="relative flex items-center justify-start pl-20 pr-32 gap-16">
+          {visibleProjects.map((project, index) => (
             <div key={project.id} className="relative flex flex-col items-center" style={{ minWidth: '280px' }}>
               {/* Timeline Node */}
-              <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-6 h-6 rounded-full bg-slate-400 z-10 shadow-lg shadow-slate-500/50"></div>
+                
               
-              {/* Connector Line */}
-              <div className={`absolute top-6 left-1/2 transform -translate-x-1/2 w-0.5 h-16 ${index % 2 === 0 ? 'bg-gradient-to-b' : 'bg-gradient-to-t'} from-slate-500 to-transparent z-0`}></div>
-
               {/* Project Card - alternating above/below timeline */}
               <div className={`relative ${index % 2 === 0 ? 'mt-24' : 'mb-24 -order-1'} group`}>
                 <div className="w-72 bg-slate-900/90 backdrop-blur-sm rounded-2xl overflow-hidden border border-slate-600/50 shadow-2xl transition-all duration-300 hover:scale-105 hover:shadow-slate-500/30 hover:border-slate-500">
@@ -114,16 +147,22 @@ export default function Project() {
               </div>
             </div>
           ))}
+          
+          {/* Show More/Less Button */}
+          {projects.length > 3 && (
+            <div className="relative flex flex-col items-center" style={{ minWidth: '200px' }}>
+              <button
+                onClick={() => setShowAll(!showAll)}
+                className="px-8 py-4 bg-slate-600 hover:bg-slate-500 text-white rounded-lg font-bold text-lg uppercase tracking-wider transition-all duration-300 shadow-lg hover:shadow-slate-500/50 border border-slate-500"
+              >
+                {showAll ? 'Show Less' : 'Show More'}
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Scroll Indicator */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex items-center gap-2 text-slate-400 drop-shadow-lg animate-bounce">
-        <span className="text-sm">Scroll to explore</span>
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-        </svg>
-      </div>
+ 
     </div>
   )
 }

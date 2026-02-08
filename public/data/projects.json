@@ -1,15 +1,6 @@
 {
   "projects": [
     {
-      "id": 1,
-      "title": "Portfolio Website",
-      "description": "Personal portfolio website built with Next.js and Tailwind CSS",
-      "image": "/portfolio.png",
-      "technologies": ["Next.js", "React", "Tailwind CSS", "TypeScript"],
-      "liveUrl": "#",
-      "githubUrl": "#"
-    },
-    {
       "id": 2,
       "title": "Finance Tracker",
       "description": "A finance management application to track expenses and income",

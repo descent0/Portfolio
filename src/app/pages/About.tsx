@@ -72,10 +72,24 @@ export default function About() {
           isMounted && isAboutVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-20'
         }`}>
           <h1 className="text-6xl font-bold text-white mb-8 uppercase tracking-wider" style={{fontFamily: 'Cinzel, serif'}}>
-            About Me
+            {"About Me".split('').map((letter, index) => (
+              <span 
+                key={index} 
+                className="inline-block transition-transform duration-200  hover:scale-125 hover:text-blue-300 cursor-default"
+              >
+                {letter === ' ' ? '\u00A0' : letter}
+              </span>
+            ))}
           </h1>
           <p className="text-white text-lg leading-relaxed" style={{fontFamily: 'Cinzel, serif'}}>
-            {profileData.about || "Loading..."}
+            {(profileData.about || "Loading...").split(' ').map((word, index) => (
+              <span 
+                key={index} 
+                className="inline-block transition-all duration-200 hover:text-blue-300 hover:scale-110 hover:-translate-y-1 cursor-default mr-1"
+              >
+                {word}
+              </span>
+            ))}
           </p>
          
         </div>
