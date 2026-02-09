@@ -89,7 +89,7 @@ export default function Hero() {
 
       {/* Action Buttons */}
       <div className="flex gap-4 flex-wrap">
-         <Link href={"da"}>
+         <Link target='_blank' href={"https://drive.google.com/file/d/185BuK5VRbLYLR-l3UpnZZyd23ztgfir4/view?usp=sharing"}>
         <button className="px-10 py-4 text-lg rounded-full border-2 border-white cursor-pointer transition-all duration-300 font-medium tracking-wide bg-transparent text-white hover:bg-white hover:text-gray-700">
           View Resume
         </button>

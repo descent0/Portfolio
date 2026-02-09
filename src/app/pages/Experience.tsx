@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useMemo } from 'react'
 import HangingLetters from '@/components/HangingLetters'
 
 interface Experience {
@@ -16,6 +16,7 @@ export default function Experience() {
   const [experiences, setExperiences] = useState<Experience[]>([])
   const [showAll, setShowAll] = useState(false)
   const [isInView, setIsInView] = useState(false)
+  const [expandedCard, setExpandedCard] = useState<number | null>(null)
   const sectionRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -50,12 +51,21 @@ export default function Experience() {
 
   // Calculate dynamic width based on number of experiences
   const experienceWidth = 320
+  const expandedExtraWidth = 140 // Extra width when a card is expanded (420px - 280px)
   const gap = 64
   const paddingLeft = 80
   const buttonWidth = experiences.length > 3 ? 200 : 0
   const pattiWidth = 120 // Width of the decorative strip at the end
-  const calculatedWidth = paddingLeft + (visibleExperiences.length * experienceWidth) + ((visibleExperiences.length - 1) * gap) + buttonWidth + pattiWidth
+  
+  // Add extra width for expanded card
+  const extraWidth = expandedCard !== null ? expandedExtraWidth : 0
+  const calculatedWidth = paddingLeft + (visibleExperiences.length * experienceWidth) + ((visibleExperiences.length - 1) * gap) + buttonWidth + pattiWidth + extraWidth
   const containerWidth = `${calculatedWidth}px`
+
+  // Memoize HangingLetters to prevent re-animation on card expand/collapse
+  const titleAnimation = useMemo(() => (
+    <HangingLetters text="EXPERIENCE" isInView={isInView} />
+  ), [isInView])
 
   return (
     <div 
@@ -67,7 +77,7 @@ export default function Experience() {
       {/* Title Section */}
       <div className="absolute top-8 left-0 z-20">
         <h1 className="text-6xl font-bold text-white uppercase tracking-[0.15em]" style={{fontFamily: 'Cinzel, serif'}}>
-          <HangingLetters text="EXPERIENCE" isInView={isInView} />
+          {titleAnimation}
         </h1>
       </div>
 
@@ -79,12 +89,20 @@ export default function Experience() {
 
         {/* Timeline Experiences */}
         <div className="relative flex items-center justify-start pl-20 pr-32 gap-16">
-          {visibleExperiences.map((experience, index) => (
-            <div key={experience.id} className="relative flex flex-col items-center" style={{ minWidth: '280px' }}>
+          {visibleExperiences.map((experience, index) => {
+            const isExpanded = expandedCard === experience.id
+            return (
+            <div key={experience.id} className="relative flex flex-col items-start" style={{ minWidth: isExpanded ? '440px' : '280px', transition: 'min-width 0.4s ease' }}>
               
               {/* Experience Card - alternating above/below timeline */}
               <div className={`relative ${index % 2 === 0 ? 'mt-24' : 'mb-24 -order-1'} group`}>
-                <div className="w-72 bg-slate-900/90 backdrop-blur-sm rounded-2xl overflow-hidden border border-slate-600/50 shadow-2xl transition-all duration-300 hover:scale-105 hover:shadow-slate-500/30 hover:border-slate-500">
+                <div 
+                  onClick={() => setExpandedCard(isExpanded ? null : experience.id)}
+                  className={`bg-slate-900/90 backdrop-blur-sm rounded-2xl overflow-hidden border shadow-2xl transition-all duration-500 cursor-pointer ${
+                    isExpanded 
+                      ? 'w-[420px] border-slate-400 shadow-slate-400/50' 
+                      : 'w-72 border-slate-600/50 hover:scale-105 hover:shadow-slate-500/30 hover:border-slate-500'
+                  }`}>
                   {/* Experience Header */}
                   <div className="relative bg-gradient-to-br from-slate-700 to-slate-800 p-6 border-b border-slate-600/50">
                     <div className="absolute top-0 right-0 w-32 h-32 bg-slate-600/20 rounded-full blur-3xl"></div>
@@ -95,16 +113,18 @@ export default function Experience() {
 
                   {/* Experience Info */}
                   <div className="p-6">
-                    <p className="text-gray-300 text-sm mb-4 line-clamp-3">{experience.description}</p>
+                    <p className={`text-gray-300 text-sm mb-4 leading-relaxed transition-all duration-300 ${
+                      isExpanded ? 'line-clamp-none' : 'line-clamp-3'
+                    }`}>{experience.description}</p>
                     
                     {/* Technologies */}
                     <div className="flex flex-wrap gap-2">
-                      {experience.technologies.slice(0, 3).map((tech, i) => (
+                      {(isExpanded ? experience.technologies : experience.technologies.slice(0, 3)).map((tech, i) => (
                         <span key={i} className="px-3 py-1 bg-slate-700/70 text-slate-200 rounded-full text-xs font-medium border border-slate-600">
                           {tech}
                         </span>
                       ))}
-                      {experience.technologies.length > 3 && (
+                      {!isExpanded && experience.technologies.length > 3 && (
                         <span className="px-3 py-1 bg-slate-700/70 text-slate-200 rounded-full text-xs font-medium border border-slate-600">
                           +{experience.technologies.length - 3}
                         </span>
@@ -117,7 +137,7 @@ export default function Experience() {
                 <div className={`absolute ${index % 2 === 0 ? '-top-4' : '-bottom-4'} left-1/2 transform -translate-x-1/2 w-8 h-8 rounded-full bg-slate-500 opacity-0 group-hover:opacity-50 transition-opacity duration-300 blur-xl`}></div>
               </div>
             </div>
-          ))}
+          )})}
           
           {/* Show More/Less Button */}
           {experiences.length > 3 && (

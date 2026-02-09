@@ -81,16 +81,22 @@ export default function About() {
               </span>
             ))}
           </h1>
-          <p className="text-white text-lg leading-relaxed" style={{fontFamily: 'Cinzel, serif'}}>
-            {(profileData.about || "Loading...").split(' ').map((word, index) => (
-              <span 
-                key={index} 
-                className="inline-block transition-all duration-200 hover:text-blue-300 hover:scale-110 hover:-translate-y-1 cursor-default mr-1"
-              >
-                {word}
-              </span>
+          <div className="text-white text-lg space-y-4" style={{fontFamily: 'Cinzel, serif'}}>
+            {(profileData.about || "Loading...").split('\n').map((paragraph, pIndex) => (
+              paragraph.trim() && (
+                <p key={pIndex}>
+                  {paragraph.split(' ').map((word, wIndex) => (
+                    <span 
+                      key={wIndex} 
+                      className="inline-block transition-all duration-200 hover:text-blue-300 hover:scale-110 hover:-translate-y-1 cursor-default mr-1"
+                    >
+                      {word}
+                    </span>
+                  ))}
+                </p>
+              )
             ))}
-          </p>
+          </div>
          
         </div>
       </div>
