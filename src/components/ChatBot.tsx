@@ -14,11 +14,57 @@ interface ChatBotProps {
   onClose: () => void
 }
 
+// Format bot messages to display structure properly
+const formatBotMessage = (text: string) => {
+  const lines = text.split('\n')
+  
+  return lines.map((line, idx) => {
+    const trimmed = line.trim()
+    
+    // Handle bullet points
+    if (trimmed.startsWith('•') || trimmed.startsWith('-') || trimmed.startsWith('*')) {
+      const content = trimmed.replace(/^[•\-*]\s*/, '')
+      return (
+        <div key={idx} className="flex gap-2 my-1.5">
+          <span className="text-white/80 flex-shrink-0 font-bold">•</span>
+          <span className="flex-1">{content}</span>
+        </div>
+      )
+    }
+    
+    // Handle numbered lists
+    if (/^\d+[\.)]\s/.test(trimmed)) {
+      return (
+        <div key={idx} className="flex gap-2 my-1.5 ml-1">
+          <span className="flex-1">{trimmed}</span>
+        </div>
+      )
+    }
+    
+    // Handle bold text with **text**
+    const parts = line.split(/(\*\*[^*]+\*\*)/)
+    const formatted = parts.map((part, i) => {
+      if (part.startsWith('**') && part.endsWith('**')) {
+        return <strong key={i} className="font-semibold text-white">{part.slice(2, -2)}</strong>
+      }
+      return <span key={i}>{part}</span>
+    })
+    
+    // Empty lines for spacing
+    if (!trimmed) {
+      return <div key={idx} className="h-2" />
+    }
+    
+    // Regular text
+    return <div key={idx} className="my-0.5">{formatted}</div>
+  })
+}
+
 export default function ChatBot({ isOpen, onClose }: ChatBotProps) {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
-      text: "👋 Hello! I'm Dishant Rajput's Portfolio Assistant. I can answer questions about Dishant's professional experience, technical skills, projects, and qualifications. How can I help you learn more about Dishant?",
+      text: "👋 **Hello! I'm Dishant Rajput's Portfolio Assistant.**\n\nI can help you know Dishant\n\nWhat would you like to know?",
       sender: 'bot',
       timestamp: new Date()
     }
@@ -35,59 +81,7 @@ export default function ChatBot({ isOpen, onClose }: ChatBotProps) {
     scrollToBottom()
   }, [messages])
 
-  const getBotResponse = (userMessage: string): string => {
-    const lowerMessage = userMessage.toLowerCase()
-
-    // Greeting
-    if (lowerMessage.includes('hello') || lowerMessage.includes('hi') || lowerMessage.includes('hey')) {
-      return "Hello! I'm here to tell you about Dishant Rajput's professional background. You can ask me about his projects, technical skills, work experience, or how to contact him. What would you like to know?"
-    }
-
-    // Projects related
-    if (lowerMessage.includes('project')) {
-      return "Dishant has developed several impressive projects:\n\n• Safe Stranger - A safety-focused application for secure social interactions\n• Finance Tracker - Full-stack finance management app with expense tracking\n• EFAT - Educational platform for students\n• NoWaitz - Queue management system\n• Portfolio Website - This professional portfolio built with Next.js\n\nEach project demonstrates his expertise in React, Node.js, and modern development practices. Would you like details about any specific project?"
-    }
-    
-    // Skills related
-    if (lowerMessage.includes('skill') || lowerMessage.includes('technology') || lowerMessage.includes('tech stack') || lowerMessage.includes('technical')) {
-      return "Dishant possesses strong technical skills across the full stack:\n\n✅ Frontend: React, Next.js, TypeScript, Tailwind CSS\n✅ Backend: Node.js, Express\n✅ Databases: MongoDB, PostgreSQL, Firebase\n✅ Tools: Git, VS Code, REST APIs\n\nHe specializes in building scalable, performant web applications with modern architectures and best practices."
-    }
-
-    // Experience related
-    if (lowerMessage.includes('experience') || lowerMessage.includes('work') || lowerMessage.includes('background')) {
-      return "Dishant has professional experience as a Full-Stack Developer, specializing in:\n\n• Building scalable web applications\n• Modern framework implementation (React, Next.js)\n• Database design and optimization\n• RESTful API development\n• Responsive UI/UX design\n\nHis approach focuses on creating maintainable, production-ready systems. Explore the Experience section for detailed information about his professional journey."
-    }
-
-    // Contact related
-    if (lowerMessage.includes('contact') || lowerMessage.includes('email') || lowerMessage.includes('reach') || lowerMessage.includes('hire') || lowerMessage.includes('connect')) {
-      return "You can reach Dishant Rajput through:\n\n📧 Email: Check the hero section for direct contact\n💼 LinkedIn: linkedin.com/in/dishant-rajput\n💻 GitHub: github.com/dishant-rajput\n\nHe's open to discussing new opportunities, collaborations, or technical consultations. Feel free to reach out!"
-    }
-
-    // Resume related
-    if (lowerMessage.includes('resume') || lowerMessage.includes('cv') || lowerMessage.includes('download')) {
-      return "Dishant's resume is available for viewing and download. Click the 'View Resume' button in the hero section to access his detailed CV, which includes:\n\n• Complete work history\n• Educational background\n• Technical certifications\n• Project portfolio\n• Professional achievements"
-    }
-
-    // About related
-    if (lowerMessage.includes('about') || lowerMessage.includes('who')) {
-      return "Dishant Rajput is a skilled Full-Stack Developer with a philosophy of 'building systems, not just code.' He focuses on:\n\n✨ Writing clean, maintainable code\n✨ Architecting scalable solutions\n✨ Delivering user-centric applications\n✨ Continuous learning and improvement\n\nHis technical expertise spans across modern web technologies, with a proven track record of delivering high-quality projects."
-    }
-
-    // Strengths/Why hire
-    if (lowerMessage.includes('strength') || lowerMessage.includes('why') || lowerMessage.includes('advantage')) {
-      return "Dishant's key strengths include:\n\n💪 Full-stack proficiency - Can handle both frontend and backend\n💪 Modern tech stack - Up-to-date with latest frameworks\n💪 Problem solver - Builds systems, not just features\n💪 Quality focused - Clean code and best practices\n💪 Fast learner - Adapts quickly to new technologies\n\nHe brings value through technical expertise combined with practical problem-solving skills."
-    }
-
-    // Availability
-    if (lowerMessage.includes('available') || lowerMessage.includes('looking') || lowerMessage.includes('open to')) {
-      return "Dishant is open to discussing new opportunities! Whether you're looking for a full-stack developer, need technical consultation, or want to collaborate on a project, he'd love to hear from you. Please use the contact options in the hero section to get in touch."
-    }
-
-    // Default response
-    return "Thanks for your interest in Dishant Rajput! I can provide information about:\n\n• His technical skills and expertise\n• Project portfolio and achievements\n• Professional experience\n• How to contact him\n\nWhat specific information would you like to know?"
-  }
-
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (!inputText.trim()) return
 
     // Add user message
@@ -98,20 +92,45 @@ export default function ChatBot({ isOpen, onClose }: ChatBotProps) {
       timestamp: new Date()
     }
     setMessages(prev => [...prev, userMessage])
+    const currentInput = inputText
     setInputText('')
     setIsTyping(true)
 
-    // Simulate bot typing and response
-    setTimeout(() => {
+    try {
+      // Call the Groq AI API
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: currentInput }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to get response from AI')
+      }
+
+      const data = await response.json()
+
       const botResponse: Message = {
         id: messages.length + 2,
-        text: getBotResponse(inputText),
+        text: data.reply || 'Sorry, I could not generate a response.',
         sender: 'bot',
         timestamp: new Date()
       }
       setMessages(prev => [...prev, botResponse])
+    } catch (error) {
+      console.error('Chat API Error:', error)
+      const errorResponse: Message = {
+        id: messages.length + 2,
+        text: "I'm sorry, I'm having trouble connecting right now. Please try again in a moment.",
+        sender: 'bot',
+        timestamp: new Date()
+      }
+      setMessages(prev => [...prev, errorResponse])
+    } finally {
       setIsTyping(false)
-    }, 1000)
+    }
   }
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -132,24 +151,22 @@ export default function ChatBot({ isOpen, onClose }: ChatBotProps) {
       ></div>
 
       {/* Chat Panel */}
-      <div className="fixed top-0 right-0 h-screen w-full md:w-[450px]  bg-gradient-to-br from-[#28292c] to-[#000000]  shadow-2xl z-50 flex flex-col border-l border-slate-700 animate-slideIn">
+      <div className="fixed top-0 right-0 h-screen w-full md:w-[34%] bg-gradient-to-br from-[#4d5361] to-[#000000] shadow-2xl z-50 flex flex-col animate-slideIn">
         {/* Header */}
-        <div className="bg-slate-800/50 backdrop-blur-sm border-b border-slate-700 p-6 flex items-center justify-between">
+        <div className="bg-black/30 backdrop-blur-sm border-b border-white/20 p-6 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-xl shadow-lg">
-              DR
-            </div>
+           
+            <img src="/favicon/Untitled_design__5_-removebg-preview.png" alt="Chatbot Icon" className="w-12 h-12 rounded" />
             <div>
-              <h2 className="text-xl font-bold text-white">Dishant's Portfolio Assistant</h2>
+              <h2 className="text-xl font-bold text-white tracking-wide" style={{fontFamily: 'Cinzel, serif'}}>Portfolio Assistant</h2>
               <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-                <span className="text-sm text-slate-400">Ask about Dishant</span>
+                 <span className="text-sm text-gray-300">Ask about Dishant</span>
               </div>
             </div>
           </div>
           <button 
             onClick={onClose}
-            className="w-10 h-10 rounded-full bg-slate-700 hover:bg-slate-600 flex items-center justify-center text-white transition-all duration-300 hover:rotate-90"
+            className="w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-all duration-300 hover:rotate-90 border border-white/20"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -159,59 +176,49 @@ export default function ChatBot({ isOpen, onClose }: ChatBotProps) {
         </div>
 
         {/* Messages Area */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-4">
+        <div className="flex-1 overflow-y-auto p-6 space-y-4 scrollbar-hide">
           {messages.map((message) => (
             <div
               key={message.id}
               className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
             >
               <div
-                className={`max-w-[80%] rounded-2xl px-4 py-3 ${
+                className={`max-w-[80%] rounded-2xl px-5 py-3 shadow-lg ${
                   message.sender === 'user'
-                    ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white'
-                    : 'bg-slate-700/50 text-slate-200 border border-slate-600'
+                    ? 'bg-white text-black border border-white/30'
+                    : 'bg-black/40 text-gray-100 border border-white/10 backdrop-blur-sm'
                 }`}
               >
-                <p className="text-sm leading-relaxed">{message.text}</p>
-                <span className="text-xs opacity-70 mt-1 block">
-                  {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                </span>
+                {message.sender === 'bot' ? (
+                  <div className="text-sm leading-relaxed">{formatBotMessage(message.text)}</div>
+                ) : (
+                  <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.text}</p>
+                )}
               </div>
             </div>
           ))}
 
-          {/* Typing Indicator */}
-          {isTyping && (
-            <div className="flex justify-start">
-              <div className="bg-slate-700/50 border border-slate-600 rounded-2xl px-4 py-3">
-                <div className="flex gap-1">
-                  <div className="w-2 h-2 rounded-full bg-slate-400 animate-bounce"></div>
-                  <div className="w-2 h-2 rounded-full bg-slate-400 animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                  <div className="w-2 h-2 rounded-full bg-slate-400 animate-bounce" style={{ animationDelay: '0.4s' }}></div>
-                </div>
-              </div>
-            </div>
-          )}
+          
           <div ref={messagesEndRef} />
         </div>
 
         {/* Input Area */}
-        <div className="bg-slate-800/50 backdrop-blur-sm border-t border-slate-700 p-4">
+        <div className="bg-black/30 backdrop-blur-sm border-t border-white/20 p-5">
           <div className="flex gap-3 items-end">
             <div className="flex-1">
               <textarea
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
                 onKeyPress={handleKeyPress}
-                placeholder="Ask about Dishant's skills, projects, or experience..."
-                className="w-full bg-slate-700/50 border border-slate-600 rounded-xl px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                placeholder="Ask about Dishant..."
+                className="w-full scrollbar-hide bg-black/30 border-2 border-white/20 rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white/40 focus:border-white/40 resize-none transition-all duration-300"
                 rows={1}
               />
             </div>
             <button
               onClick={handleSendMessage}
               disabled={!inputText.trim()}
-              className="w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center text-white hover:from-blue-700 hover:to-purple-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-blue-500/50"
+              className="w-12 h-12 bg-white text-black rounded-xl flex items-center justify-center hover:bg-gray-200 transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed shadow-lg hover:scale-105 disabled:hover:scale-100"
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <line x1="22" y1="2" x2="11" y2="13"></line>
@@ -219,8 +226,7 @@ export default function ChatBot({ isOpen, onClose }: ChatBotProps) {
               </svg>
             </button>
           </div>
-          <p className="text-xs text-slate-500 mt-2 text-center">Press Enter to send</p>
-        </div>
+            </div>
       </div>
 
       <style jsx>{`
@@ -234,6 +240,13 @@ export default function ChatBot({ isOpen, onClose }: ChatBotProps) {
         }
         .animate-slideIn {
           animation: slideIn 0.3s ease-out;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
         }
       `}</style>
     </>

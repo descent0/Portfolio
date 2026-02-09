@@ -1,12 +1,8 @@
 'use client'
 
-import { useState } from 'react'
-import ChatBot from '@/components/ChatBot'
 import Link from 'next/link'
 
 export default function Hero() {
-  const [isChatOpen, setIsChatOpen] = useState(false)
-
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId)
     if (element) {
@@ -128,20 +124,7 @@ export default function Hero() {
             <img src="/finance.png" alt="Project showcase" className="w-full h-auto rounded-[10px] block group-hover:scale-105 transition-transform duration-300" />
           </div>
         </div>
-
-        <button 
-          onClick={() => setIsChatOpen(true)}
-          className="self-end px-8 py-4 bg-transparent border-2 border-white text-white rounded-full text-base font-medium cursor-pointer flex items-center gap-2 transition-all duration-300 mx-8 my-4 mb-4 hover:bg-white hover:text-gray-600 hover:translate-x-1 [&>svg]:hover:translate-x-1"
-        >
-          Ask AI
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform duration-300">
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-          </svg>
-        </button>
       </div>
-
-      {/* ChatBot Component */}
-      <ChatBot isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
     </div>
   )
 }
