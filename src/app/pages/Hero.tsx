@@ -94,7 +94,7 @@ export default function Hero() {
           View Resume
         </button>
         </Link>
-        <Link href={"#"}>
+        <Link  href={"mailto:rajputdishant891@gmail.com"}>
         <button className="px-10 py-4 text-lg rounded-full border-2 border-white cursor-pointer transition-all duration-300 font-medium tracking-wide bg-white text-gray-700 hover:bg-transparent hover:text-white">
           Connect
         </button>
@@ -117,9 +117,7 @@ export default function Hero() {
           <button onClick={() => scrollToSection('experiences')} className="text-white no-underline text-base font-medium transition-all duration-300 relative hover:text-gray-200 after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-0.5 after:bg-white after:transition-all after:duration-300 hover:after:w-full bg-transparent border-none cursor-pointer">
             Experiences
           </button>
-          <button onClick={() => scrollToSection('skills')} className="text-white no-underline text-base font-medium transition-all duration-300 relative hover:text-gray-200 after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-0.5 after:bg-white after:transition-all after:duration-300 hover:after:w-full bg-transparent border-none cursor-pointer">
-            Skills
-          </button>
+          
         </nav>
 
         <div className="flex-1 flex items-center justify-center gap-8 relative p-8">
