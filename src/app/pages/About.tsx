@@ -65,13 +65,13 @@ export default function About() {
   }, [isMounted]);
 
   return (
-    <div className="min-w-screen w-screen h-screen flex relative overflow-hidden  bg-gradient-to-b from-slate-800 via-slate-700 to-slate-800 ">
+    <div className="min-w-screen w-screen min-h-screen flex flex-col lg:flex-row relative overflow-hidden  bg-gradient-to-b from-slate-800 via-slate-700 to-slate-800 ">
       {/* Left Half - About Me */}
-      <div id="about" ref={aboutRef} className="w-1/2 h-full    flex items-center justify-center relative">
-        <div className={`max-w-xl px-12 transition-all duration-1000 ease-out ${
+      <div id="about" ref={aboutRef} className="w-full lg:w-1/2 min-h-[50vh] lg:h-full flex items-center justify-center relative py-12 lg:py-0">
+        <div className={`max-w-xl px-6 sm:px-8 md:px-12 transition-all duration-1000 ease-out ${
           isMounted && isAboutVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-20'
         }`}>
-          <h1 className="text-6xl font-bold text-white mb-8 uppercase tracking-wider" style={{fontFamily: 'Cinzel, serif'}}>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 md:mb-8 uppercase tracking-wider" style={{fontFamily: 'Cinzel, serif'}}>
             {"About Me".split('').map((letter, index) => (
               <span 
                 key={index} 
@@ -81,7 +81,7 @@ export default function About() {
               </span>
             ))}
           </h1>
-          <div className="text-white text-lg space-y-4" style={{fontFamily: 'Cinzel, serif'}}>
+          <div className="text-white text-sm sm:text-base md:text-lg space-y-3 md:space-y-4" style={{fontFamily: 'Cinzel, serif'}}>
             {(profileData.about || "Loading...").split('\n').map((paragraph, pIndex) => (
               paragraph.trim() && (
                 <p key={pIndex}>
@@ -102,11 +102,11 @@ export default function About() {
       </div>
 
       {/* Right Half - Skills */}
-      <div id="skills" ref={skillsRef} className="w-1/2 h-full  flex items-center justify-center relative">
-        <div className="w-full h-full px-12 py-3 relative">
+      <div id="skills" ref={skillsRef} className="w-full lg:w-1/2 h-full flex items-center justify-center relative py-8 sm:py-12 lg:py-8">
+        <div className="w-full h-full px-4 sm:px-6 md:px-8 py-2 sm:py-4 relative">
          
           
-          <div className="relative z-10 w-full h-full flex flex-col justify-center gap-3">
+          <div className="relative z-10 w-full h-full flex flex-col justify-center items-center gap-2 sm:gap-4 md:gap-5 lg:gap-6">
             {skillsData.map((category, index) => (
               <SkillBox 
                 key={index} 

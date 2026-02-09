@@ -11,10 +11,17 @@ interface SkillBoxProps {
 const SkillBox = ({title, skills, position, index, isVisible}: SkillBoxProps) => {
   const delay = 0; // 200ms delay between each box
   
+  // Determine positioning classes based on screen size and position
+  const positionClasses = position === 'left' 
+    ? 'mr-auto ml-4 sm:ml-6 md:ml-8 lg:ml-10' 
+    : 'ml-auto mr-4 sm:mr-6 md:mr-8 lg:mr-10';
+  
   return (
     <div 
-      className={`group/skillbox w-[50%] h-1/2 bg-gradient-to-br from-[#4d5361] to-[#000000] p-6 rounded-lg border-l-4 border-gray-500 
-        ${position === 'left' ? 'ml-8' : 'ml-auto mr-8'}
+      className={`group/skillbox w-[92%] sm:w-[80%] md:w-[75%] lg:w-[70%] xl:w-[60%] 
+        bg-gradient-to-br from-[#4d5361] to-[#000000] 
+        p-3 sm:p-4 md:p-5 lg:p-6 rounded-lg border-l-4 border-gray-500 
+        ${positionClasses}
         transition-all duration-700 ease-out
         hover:scale-105 hover:shadow-2xl hover:border-white hover:shadow-blue-500/50 hover:-translate-y-2
         ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-20'}
@@ -30,7 +37,7 @@ const SkillBox = ({title, skills, position, index, isVisible}: SkillBoxProps) =>
       <div className="absolute top-0 right-0 w-20 h-20 bg-blue-400/0 rounded-full blur-2xl group-hover/skillbox:bg-blue-400/20 transition-all duration-500"></div>
       <div className="absolute bottom-0 left-0 w-16 h-16 bg-purple-400/0 rounded-full blur-2xl group-hover/skillbox:bg-purple-400/20 transition-all duration-700"></div>
       
-      <h2 className="relative z-10 text-xl font-semibold text-white uppercase tracking-wide mb-3 transition-all duration-300 group-hover/skillbox:text-blue-300 group-hover/skillbox:scale-105" style={{fontFamily: 'Cinzel, serif'}}>
+      <h2 className="relative z-10 text-sm sm:text-base md:text-lg lg:text-xl font-semibold text-white uppercase tracking-wide mb-1 sm:mb-2 transition-all duration-300 group-hover/skillbox:text-blue-300 group-hover/skillbox:scale-105" style={{fontFamily: 'Cinzel, serif'}}>
         {title.split('').map((letter, index) => (
           <span 
             key={index} 
@@ -41,7 +48,7 @@ const SkillBox = ({title, skills, position, index, isVisible}: SkillBoxProps) =>
           </span>
         ))}
       </h2>
-      <p className="relative z-10 text-gray-300 text-sm leading-relaxed group-hover/skillbox:text-gray-100 transition-colors duration-300" style={{fontFamily: 'Cinzel, serif'}}>
+      <p className="relative z-10 text-gray-300 text-[10px] sm:text-xs md:text-sm leading-tight sm:leading-relaxed group-hover/skillbox:text-gray-100 transition-colors duration-300" style={{fontFamily: 'Cinzel, serif'}}>
         {skills.split(', ').map((skill, index) => (
           <span 
             key={index} 
