@@ -52,10 +52,10 @@ export default function Experience() {
   const experienceWidth = 320
   const gap = 64
   const paddingLeft = 80
-  const paddingRight = 128
-  const buttonWidth = 200
-  const calculatedWidth = paddingLeft + (visibleExperiences.length * experienceWidth) + ((visibleExperiences.length - 1) * gap) + buttonWidth + paddingRight
-  const containerWidth = `${Math.max(calculatedWidth, typeof window !== 'undefined' ? window.innerWidth : 1024)}px`
+  const buttonWidth = experiences.length > 3 ? 200 : 0
+  const pattiWidth = 120 // Width of the decorative strip at the end
+  const calculatedWidth = paddingLeft + (visibleExperiences.length * experienceWidth) + ((visibleExperiences.length - 1) * gap) + buttonWidth + pattiWidth
+  const containerWidth = `${calculatedWidth}px`
 
   return (
     <div 
@@ -72,21 +72,15 @@ export default function Experience() {
       </div>
 
       {/* Timeline Container */}
-      <div className="absolute top-1/2 left-10 w-full transform -translate-y-1/2 transition-all duration-700">
+      <div className="absolute top-1/2 left-10 transform -translate-y-1/2 transition-all duration-700" style={{width: `calc(${calculatedWidth - pattiWidth - 40}px)`}}>
         {/* Timeline Line */}
-        <div className="absolute top-1/2 left-0 w-[calc(100%-10px)] h-1 bg-gradient-to-r from-slate-600 via-slate-500 to-slate-600 transform -translate-y-1/2 z-0 transition-all duration-700"></div>
+        <div className="absolute top-1/2 left-0 h-1 bg-gradient-to-r from-slate-600 via-slate-500 to-slate-600 transform -translate-y-1/2 z-0 transition-all duration-700" style={{width: `calc(100% - 40px)`}}></div>
         
-        {/* Animated glow effect on timeline */}
-        <div className="absolute top-1/2 left-0 w-full h-1 transform -translate-y-1/2 z-0 transition-all duration-700">
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-slate-400 to-transparent opacity-30 animate-pulse"></div>
-        </div>
 
         {/* Timeline Experiences */}
         <div className="relative flex items-center justify-start pl-20 pr-32 gap-16">
           {visibleExperiences.map((experience, index) => (
             <div key={experience.id} className="relative flex flex-col items-center" style={{ minWidth: '280px' }}>
-              {/* Timeline Node */}
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-slate-400 border-4 border-slate-700 z-10 shadow-lg shadow-slate-400/50"></div>
               
               {/* Experience Card - alternating above/below timeline */}
               <div className={`relative ${index % 2 === 0 ? 'mt-24' : 'mb-24 -order-1'} group`}>
@@ -136,6 +130,16 @@ export default function Experience() {
               </button>
             </div>
           )}
+        </div>
+      </div>
+
+      {/* Vertical Strip at Right End */}
+      <div className="absolute right-0 top-0 h-full w-[8%] bg-gradient-to-br  from-[#4d5361] to-[#000000]  border-l-2 border-slate-500/50 flex items-center justify-center shadow-2xl">
+        <div className="transform -rotate-90 whitespace-nowrap">
+          <span className="text-slate-300 text-lg font-extrabold uppercase tracking-[0.3em]" style={{fontFamily: 'Cinzel, serif'}}>
+            Thank You
+          </span>
+            
         </div>
       </div>
     </div>

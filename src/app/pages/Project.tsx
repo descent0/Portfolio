@@ -1,6 +1,7 @@
 'use client'
 
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useMemo } from 'react'
+import Image from 'next/image'
 import HangingLetters from '@/components/HangingLetters'
 
 interface Project {
@@ -17,6 +18,7 @@ export default function Project() {
   const [projects, setProjects] = useState<Project[]>([])
   const [showAll, setShowAll] = useState(false)
   const [isInView, setIsInView] = useState(false)
+  const [expandedCard, setExpandedCard] = useState<number | null>(null)
   const sectionRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -29,23 +31,25 @@ export default function Project() {
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting && !isInView) {
+        if (entry.isIntersecting) {
           setIsInView(true)
+          observer.disconnect() // Stop observing after first trigger
         }
       },
       { threshold: 0.2 }
     )
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current)
+    const currentRef = sectionRef.current
+    if (currentRef) {
+      observer.observe(currentRef)
     }
 
     return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current)
+      if (currentRef) {
+        observer.unobserve(currentRef)
       }
     }
-  }, [isInView])
+  }, [])
 
   const visibleProjects = showAll ? projects : projects.slice(0, 3)
 
@@ -58,6 +62,11 @@ export default function Project() {
   const calculatedWidth = paddingLeft + (visibleProjects.length * projectWidth) + ((visibleProjects.length - 1) * gap) + buttonWidth + paddingRight
   const containerWidth = `${Math.max(calculatedWidth, typeof window !== 'undefined' ? window.innerWidth : 1024)}px`
 
+  // Memoize HangingLetters to prevent re-animation on card expand/collapse
+  const titleAnimation = useMemo(() => (
+    <HangingLetters text="FEATURED" isInView={isInView} />
+  ), [isInView])
+
   return (
     <div 
       ref={sectionRef}
@@ -68,7 +77,7 @@ export default function Project() {
       {/* Title Section */}
       <div className="absolute top-8 left-0 z-20">
         <h1 className="text-6xl font-bold text-white uppercase tracking-[0.15em]" style={{fontFamily: 'Cinzel, serif'}}>
-          <HangingLetters text="FEATURED" isInView={isInView} />
+          {titleAnimation}
         </h1>
       </div>
 
@@ -84,44 +93,54 @@ export default function Project() {
 
         {/* Timeline Projects */}
         <div className="relative flex items-center justify-start pl-20 pr-32 gap-16">
-          {visibleProjects.map((project, index) => (
-            <div key={project.id} className="relative flex flex-col items-center" style={{ minWidth: '280px' }}>
+          {visibleProjects.map((project, index) => {
+            const isExpanded = expandedCard === project.id
+            return (
+            <div key={project.id} className="relative flex flex-col items-start" style={{ minWidth: isExpanded ? '440px' : '280px', transition: 'min-width 0.4s ease' }}>
               {/* Timeline Node */}
                 
               
               {/* Project Card - alternating above/below timeline */}
               <div className={`relative ${index % 2 === 0 ? 'mt-24' : 'mb-24 -order-1'} group`}>
-                <div className="w-72 bg-slate-900/90 backdrop-blur-sm rounded-2xl overflow-hidden border border-slate-600/50 shadow-2xl transition-all duration-300 hover:scale-105 hover:shadow-slate-500/30 hover:border-slate-500">
+                <div 
+                  onClick={() => setExpandedCard(isExpanded ? null : project.id)}
+                  className={`bg-slate-900/90 backdrop-blur-sm rounded-2xl overflow-hidden border shadow-2xl transition-all duration-500 cursor-pointer ${
+                    isExpanded 
+                      ? 'w-[420px] border-slate-400 shadow-slate-400/50' 
+                      : 'w-72 border-slate-600/50 hover:scale-105 hover:shadow-slate-500/30 hover:border-slate-500'
+                  }`}
+                >
                   {/* Project Image */}
                   <div className="relative h-48 bg-gradient-to-br from-slate-700 to-slate-800 overflow-hidden">
-                    <div className="absolute inset-0 flex items-center justify-center text-6xl opacity-20">
-                      {project.title === 'Safe Stranger' && '🛡️'}
-                      {project.title === 'Portfolio Website' && '💼'}
-                      {project.title === 'Finance Tracker' && '💰'}
-                      {project.title === 'EFAT' && '📚'}
-                      {project.title === 'NoWaitz' && '⏱️'}
-                      {project.title === 'Nyaauta' && '🎌'}
-                    </div>
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent opacity-60"></div>
+                    <Image
+                      src={project.image}
+                      alt={project.title}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, 420px"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent"></div>
                     
                     {/* Project Title Overlay */}
-                    <div className="absolute bottom-0 left-0 right-0 p-4">
+                    <div className="absolute bottom-0 left-0 right-0 p-4 z-10">
                       <h3 className="text-2xl font-bold text-white drop-shadow-lg">{project.title}</h3>
                     </div>
                   </div>
 
                   {/* Project Info */}
                   <div className="p-6">
-                    <p className="text-gray-300 text-sm mb-4 line-clamp-2">{project.description}</p>
+                    <p className={`text-gray-200 mb-4 leading-relaxed transition-all duration-300 ${
+                      isExpanded ? 'text-base line-clamp-none' : 'text-base line-clamp-3'
+                    }`}>{project.description}</p>
                     
                     {/* Technologies */}
                     <div className="flex flex-wrap gap-2 mb-4">
-                      {project.technologies.slice(0, 3).map((tech, i) => (
+                      {(isExpanded ? project.technologies : project.technologies.slice(0, 3)).map((tech, i) => (
                         <span key={i} className="px-3 py-1 bg-slate-700/70 text-slate-200 rounded-full text-xs font-medium border border-slate-600">
                           {tech}
                         </span>
                       ))}
-                      {project.technologies.length > 3 && (
+                      {!isExpanded && project.technologies.length > 3 && (
                         <span className="px-3 py-1 bg-slate-700/70 text-slate-200 rounded-full text-xs font-medium border border-slate-600">
                           +{project.technologies.length - 3}
                         </span>
@@ -130,14 +149,46 @@ export default function Project() {
 
                     {/* Action Buttons */}
                     <div className="flex gap-3">
-                      <a href={project.liveUrl} className="flex-1 px-4 py-2 bg-slate-600 text-white rounded-lg text-sm font-medium text-center hover:bg-slate-500 transition-all duration-300">
-                        View Live
-                      </a>
-                      <a href={project.githubUrl} className="px-4 py-2 bg-slate-700 text-white rounded-lg text-sm font-medium hover:bg-slate-600 transition-all duration-300">
-                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
-                        </svg>
-                      </a>
+                      {project.liveUrl && project.liveUrl !== '#' ? (
+                        <a 
+                          href={project.liveUrl} 
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="flex-1 px-4 py-2 bg-slate-600 text-white rounded-lg text-sm font-medium text-center hover:bg-slate-500 transition-all duration-300"
+                        >
+                          View Live
+                        </a>
+                      ) : (
+                        <button
+                          disabled
+                          className="flex-1 px-4 py-2 bg-slate-700/50 text-slate-500 rounded-lg text-sm font-medium text-center cursor-not-allowed opacity-50"
+                        >
+                          View Live
+                        </button>
+                      )}
+                      {project.githubUrl && project.githubUrl !== '#' ? (
+                        <a 
+                          href={project.githubUrl} 
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="px-4 py-2 bg-slate-700 text-white rounded-lg text-sm font-medium hover:bg-slate-600 transition-all duration-300"
+                        >
+                          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+                          </svg>
+                        </a>
+                      ) : (
+                        <button
+                          disabled
+                          className="px-4 py-2 bg-slate-700/50 text-slate-500 rounded-lg text-sm font-medium cursor-not-allowed opacity-50"
+                        >
+                          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+                          </svg>
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -146,7 +197,8 @@ export default function Project() {
                 <div className={`absolute ${index % 2 === 0 ? '-top-4' : '-bottom-4'} left-1/2 transform -translate-x-1/2 w-8 h-8 rounded-full bg-slate-500 opacity-0 group-hover:opacity-50 transition-opacity duration-300 blur-xl`}></div>
               </div>
             </div>
-          ))}
+          )})}
+          
           
           {/* Show More/Less Button */}
           {projects.length > 3 && (

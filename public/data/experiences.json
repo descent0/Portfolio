@@ -1,27 +1,20 @@
 {
   "experiences": [
-    {
-      "id": 1,
-      "title": "Full Stack Developer",
-      "company": "Company Name",
-      "period": "2023 - Present",
-      "description": "Developed and maintained web applications using MERN stack. Collaborated with cross-functional teams to deliver high-quality products.",
-      "technologies": ["React", "Node.js", "MongoDB", "Express"]
-    },
+    
     {
       "id": 2,
-      "title": "Frontend Developer Intern",
-      "company": "Startup XYZ",
-      "period": "2022 - 2023",
-      "description": "Built responsive user interfaces and improved website performance. Worked with modern frontend frameworks and tools.",
-      "technologies": ["React", "Next.js", "Tailwind CSS"]
+      "title": "Full Stack Intern",
+      "company": "Outhad",
+      "period": "Jul 2025 - Oct 2025",
+      "description": "Improved their website and portal performance by solving the rendering issues. Worked with modern frontend frameworks and tools.",
+      "technologies": ["React", "Tailwind CSS"]
     },
     {
       "id": 3,
-      "title": "Technical Lead",
-      "company": "College Tech Club",
-      "period": "2021 - 2023",
-      "description": "Led digital initiatives and organized tech events. Mentored students in web development and programming.",
+      "title": "Content Manager",
+      "company": "Creative Cell (College Club)",
+      "period": "",
+      "description": "Led digital promotions and organized events.",
       "technologies": ["Leadership", "Event Management", "Mentoring"]
     }
   ]

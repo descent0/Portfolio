@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import ChatBot from '@/components/ChatBot'
+import Link from 'next/link'
 
 export default function Hero() {
   const [isChatOpen, setIsChatOpen] = useState(false)
@@ -88,12 +89,16 @@ export default function Hero() {
 
       {/* Action Buttons */}
       <div className="flex gap-4 flex-wrap">
+         <Link href={"da"}>
         <button className="px-10 py-4 text-lg rounded-full border-2 border-white cursor-pointer transition-all duration-300 font-medium tracking-wide bg-transparent text-white hover:bg-white hover:text-gray-700">
           View Resume
         </button>
+        </Link>
+        <Link href={"#"}>
         <button className="px-10 py-4 text-lg rounded-full border-2 border-white cursor-pointer transition-all duration-300 font-medium tracking-wide bg-white text-gray-700 hover:bg-transparent hover:text-white">
           Connect
         </button>
+        </Link>
       </div>
     </div>
   </div>
