@@ -1,0 +1,11 @@
+{
+  "name": "DISHANT RAJPUT",
+  "tagline": "I BUILD SYSTEMS, NOT JUST CODE",
+  "email": "rajputdishant891@gmail.com",
+  "about": "I'm a Computer Science & Engineering undergrad who thinks like an engineer but builds like a creator.\n\nMy comfort zone is MERN, but curiosity keeps pulling me into Next.js, PHP, and NLP.\n\nI enjoy breaking problems down, designing clean systems, and shipping things that actually make sense in the real world.\n\nWhether it's code, collaboration, or leading digital ideas—I believe good engineering is equal parts logic, creativity, and intent.",
+  "showcaseImages": [
+    "/portfolio.png",
+    "/finance.png"
+  ],
+  "resumeUrl":"https://drive.google.com/file/d/185BuK5VRbLYLR-l3UpnZZyd23ztgfir4/view?usp=sharing"
+}

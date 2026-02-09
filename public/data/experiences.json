@@ -1,0 +1,21 @@
+{
+  "experiences": [
+    
+    {
+      "id": 2,
+      "title": "Full Stack Intern",
+      "company": "Outhad",
+      "period": "Jul 2025 - Oct 2025",
+      "description": "Improved their website and portal performance by solving the rendering issues. Worked with modern frontend frameworks and tools.",
+      "technologies": ["React", "Tailwind CSS"]
+    },
+    {
+      "id": 3,
+      "title": "Content Manager",
+      "company": "Creative Cell (College Club)",
+      "period": "",
+      "description": "Led digital promotions and organized events.",
+      "technologies": ["Leadership", "Event Management", "Mentoring"]
+    }
+  ]
+}

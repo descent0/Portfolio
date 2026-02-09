@@ -1,0 +1,51 @@
+{
+  "projects": [
+    {
+      "id": 1,
+      "title": "SafeStranger",
+      "description": "Real-time anonymous chat and video matching platform built with WebRTC and a custom signaling server, featuring NSFW.js for live video moderation and an efficient pool-based matching algorithm.",
+      "image": "/safeStranger.png",
+      "technologies": ["Next.js", "WebRTC", "Web Sockets", "Signaling Server", "NSFW.js", "Tailwind CSS"],
+      "liveUrl": "https://safe-strangers.vercel.app/",
+      "githubUrl": "https://github.com/descent0/SAFE_STRANGERS"
+    },
+     {
+      "id": 5,
+      "title": "noWaitz",
+      "description": "MERN-based web app for booking service slots at local shops, featuring Google OAuth, Razorpay payments, email confirmations, and an admin panel.",
+      "image": "/nowaitz.png",
+      "technologies": ["React", "Node.js", "MongoDB", "Express.js", "JWT", "Razorpay", "NodeMailer", "Google OAuth"],
+      "liveUrl": "https://nowaitz.vercel.app/login",
+      "githubUrl": "https://github.com/descent0/nowaitz"
+    },
+    
+    {
+      "id": 4,
+      "title": "EFAT - Eco Feasibility Tool",
+      "description": "A platform to assess startup eco-friendliness by checking parameters like energy use and waste, offering NLP-driven insights and AI-based recommendations to improve environmental sustainability",
+      "image": "/EFAT.png",
+      "technologies": ["MongoDB", "React", "Express.js", "Flask", "JWT", "Tailwind CSS", "Hugging Face", "Random Forest"],
+      "liveUrl": "",
+      "githubUrl": "https://github.com/descent0/EFAT"
+    },
+   
+    {
+      "id": 2,
+      "title": "Personal Financial Visualiser",
+      "description": "A dashboard to visualize & track your finance according to the vis",
+      "image": "/finance.png",
+      "technologies": ["Next.js", "shadCN UI", "Tailwind CSS", "lucide-react"],
+      "liveUrl": "",
+      "githubUrl": ""
+    },
+    {
+      "id": 3,
+      "title": "Nyaauta",
+      "description": "Web platform for managing digital invitations with card categories and employee controls. Includes design tools and bulk email delivery.",
+      "image": "/nyaauta.png",
+      "technologies": ["PHP", "MySQL", "HTML5", "Bootstrap", "JavaScript", "XAMPP", "stateful_auth"],
+      "liveUrl": "",
+      "githubUrl": "https://github.com/descent0/Nyaauta"
+    }
+  ]
+}
